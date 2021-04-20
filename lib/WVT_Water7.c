@@ -88,7 +88,7 @@ uint8_t WVT_W7_Parse(uint8_t * data, uint16_t length, uint8_t * responce_buffer)
             
             uint16_t current_parameter = 0;
             while (	(return_code == WVT_W7_ERROR_CODE_OK)
-                &&	(current_parameter <= number_of_parameters)	)
+                &&	(current_parameter < number_of_parameters)	)
             {
                 return_code = WVT_W7_Single_Parameter((addres + current_parameter), WVT_W7_PARAMETER_READ, 
                     (responce_buffer + WVT_W7_MULTI_DATA_OFFSET + (current_parameter * WVT_W7_PARAMETER_WIDTH)));
@@ -116,7 +116,7 @@ uint8_t WVT_W7_Parse(uint8_t * data, uint16_t length, uint8_t * responce_buffer)
             
             uint16_t current_parameter = 0;
             while (     (return_code == WVT_W7_ERROR_CODE_OK)
-                    &&	(current_parameter <= number_of_parameters) )
+                    &&	(current_parameter < number_of_parameters) )
             {
                 return_code = WVT_W7_Single_Parameter((addres + current_parameter),
                     WVT_W7_PARAMETER_WRITE, 
