@@ -426,3 +426,33 @@ uint8_t WVT_W7_Scheduler(uint8_t current_hour, uint8_t current_minute, int32_t s
 	
 	return ret;
 }
+
+/**
+ * @brief       Рассчитывает, нужно ли сейчас отправлять периодическое сообщение, исходя
+ *              из желаемоего количества отправок в день. Распределяет события равномерно
+ *              в течении дня.
+ *              Если для текущей комбинации час-минута-секунда срабатывает событие, то следующий вызов функции
+ *              с этой же комбинацией не приведет к срабатыванию события. 
+ * 
+ * @param current_hour    Текущий час
+ * @param current_minute  Текущая минута
+ * @param current_second  Текущая секунда
+ * @param schedule        Желаемое число отправок в день
+ * @return                - 0 нет события
+ *                        - 1 событие 
+ */
+uint8_t WVT_W7_PrecisionScheduler(uint8_t current_hour, uint8_t current_minute, uint8_t current_second, int32_t schedule)
+{	
+      static uint32_t next_execution_time = 0;
+      uint8_t ret = 0;
+      // Частота отправки равна числу секунд в день, деленных на необходимое число сообщений
+      schedule = (24 * 3600) / schedule;	
+      const uint32_t seconds_since_beginning = (current_hour * 3600) + current_minute*60 + current_second;
+      if (seconds_since_beginning > next_execution_time)
+      {
+          ret = 1;
+          next_execution_time = seconds_since_beginning + schedule;
+          if(next_execution_time>=24*60*60)next_execution_time-=24*60*60;
+      }
+      return ret;
+}
