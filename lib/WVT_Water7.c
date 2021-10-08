@@ -427,6 +427,7 @@ uint8_t WVT_W7_Scheduler(uint8_t current_hour, uint8_t current_minute, int32_t s
 	return ret;
 }
 
+
 /**
  * @brief       Рассчитывает, нужно ли сейчас отправлять периодическое сообщение, исходя
  *              из желаемоего количества отправок в день. Распределяет события равномерно
@@ -443,16 +444,24 @@ uint8_t WVT_W7_Scheduler(uint8_t current_hour, uint8_t current_minute, int32_t s
  */
 uint8_t WVT_W7_PrecisionScheduler(uint8_t current_hour, uint8_t current_minute, uint8_t current_second, int32_t schedule)
 {	
-      static uint32_t next_execution_time = 0;
-      uint8_t ret = 0;
-      // Частота отправки равна числу секунд в день, деленных на необходимое число сообщений
-      schedule = (24 * 3600) / schedule;	
-      const uint32_t seconds_since_beginning = (current_hour * 3600) + current_minute*60 + current_second;
-      if (seconds_since_beginning > next_execution_time)
-      {
-          ret = 1;
-          next_execution_time = seconds_since_beginning + schedule;
-          if(next_execution_time>=24*60*60)next_execution_time-=24*60*60;
-      }
-      return ret;
+    uint8_t ret = 0;
+    static uint32_t next_execution_time = 0;
+    static uint8_t wait_new_day = 0;
+    static uint8_t last_hour = 0;
+    // Частота отправки равна числу секунд в день, деленных на необходимое число сообщений
+    uint32_t newschedule = (24 * 3600) / schedule;
+    uint32_t seconds_since_beginning = (uint32_t)((current_hour * 3600) + current_minute * 60 + current_second);
+    if (current_hour < last_hour) wait_new_day = 0;
+    if (seconds_since_beginning >= next_execution_time && wait_new_day == 0)
+    {
+        ret = 1;
+        next_execution_time = (uint32_t)(next_execution_time + newschedule);
+        if (next_execution_time >= 24 * 60 * 60)
+        {
+            wait_new_day = 1;
+            next_execution_time -= 24 * 60 * 60;
+        }
+    }
+    last_hour = current_hour;
+    return ret;
 }
