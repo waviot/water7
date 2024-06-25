@@ -296,6 +296,29 @@ uint8_t WVT_W7_Event(uint16_t event, uint16_t payload, uint8_t * responce_buffer
 }
 
 /**
+ * @brief	    Формирует часовой парный пакет
+ *
+ * @param 	   	par		   	    Передаваемый параметр
+ * @param 	   	value		   	Передаваемое значение параметра
+ * @param 	   	diff		   	Разниза с value час назад
+ * @param [out]	responce_buffer	Выходной буфер с сообщением NB-Fi.
+ *
+ * @returns	Число байт, записанных в выходной буфер.
+ */
+uint8_t WVT_W7_PairEvent(uint8_t par, uint32_t value, uint16_t diff,  uint8_t * responce_buffer)
+{
+    responce_buffer[0] = WVT_W7_PACKET_TYPE_PAIR_EVENT;
+    responce_buffer[1] = par;
+    responce_buffer[2] = (value >> 24);
+    responce_buffer[3] = (value >> 16);
+    responce_buffer[4] = (value >> 8);
+    responce_buffer[5] = (value >> 0);
+    responce_buffer[6] = (diff >> 8);
+    responce_buffer[6] =  diff & 0xFF;   
+    return 8;
+}
+
+/**
  * @brief	    Распаковывает значение настройки дополнительных параметров
  *              Возвращает число параметров, настроенных для отправки и записывает
  *              их адреса во входной массив

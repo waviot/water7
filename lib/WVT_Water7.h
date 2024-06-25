@@ -91,6 +91,7 @@ extern "C" {
         uint16_t schedule, 
         int32_t additional_parameters);
     uint8_t WVT_W7_Event(uint16_t event, uint16_t payload, uint8_t * responce_buffer);
+    uint8_t WVT_W7_PairEvent(uint8_t par, uint32_t value, uint16_t diff,  uint8_t * responce_buffer);
     uint8_t WVT_W7_Parse_Additional_Parameters(uint8_t * parameters, int32_t setting);
     uint8_t WVT_W7_Scheduler(uint8_t current_hour, uint8_t current_minute, int32_t schedule);
     uint8_t WVT_W7_PrecisionScheduler(uint8_t current_hour, uint8_t current_minute, uint8_t current_second, int32_t schedule); 
