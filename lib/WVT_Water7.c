@@ -478,7 +478,7 @@ uint8_t WVT_W7_PrecisionScheduler(uint8_t current_hour, uint8_t current_minute, 
     if (seconds_since_beginning >= next_execution_time && wait_new_day == 0)
     {
         ret = 1;
-        next_execution_time = (uint32_t)(next_execution_time + newschedule);
+        next_execution_time = (uint32_t)(seconds_since_beginning + newschedule);
         if (next_execution_time >= 24 * 60 * 60)
         {
             wait_new_day = 1;
