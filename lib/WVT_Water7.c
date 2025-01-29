@@ -314,7 +314,7 @@ uint8_t WVT_W7_PairEvent(uint8_t par, uint32_t value, uint16_t diff,  uint8_t * 
     responce_buffer[4] = (value >> 8);
     responce_buffer[5] = (value >> 0);
     responce_buffer[6] = (diff >> 8);
-    responce_buffer[6] =  diff & 0xFF;   
+    responce_buffer[7] =  diff & 0xFF;   
     return 8;
 }
 
